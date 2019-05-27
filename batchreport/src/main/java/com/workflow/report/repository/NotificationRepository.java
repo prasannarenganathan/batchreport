@@ -13,5 +13,5 @@ import com.workflow.report.model.Notification;
 public interface NotificationRepository extends JpaRepository<Notification, String> {
 
     @Query("SELECT n.notificationKey  FROM Notification n where n.keyValuePairId = keyValuePairId")
-    String findTitleById(@Param("keyValuePairId") UUID keyValuePairId);
+    String findNotificationIdByKeyValuePairId(@Param("keyValuePairId") UUID keyValuePairId);
 }
