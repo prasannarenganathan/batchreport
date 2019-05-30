@@ -1,4 +1,4 @@
-package com.cnasurety.extagencyint.batches.ivans;
+package com.cnasurety.extagencyint.batches.ivans.reporting;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +17,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.cnasurety.extagencyint.batches.ivans.reporting.ReportingBatchConfigurer;
+import com.cnasurety.extagencyint.batches.ivans.reporting.service.ExportService;
 
 @Configuration
 @EnableBatchProcessing
-public class SuretyIvansReportingJobConfiguration extends ReportingBatchConfigurer {
+public class SuretyIvansReportingJobConfiguration {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -31,21 +31,40 @@ public class SuretyIvansReportingJobConfiguration extends ReportingBatchConfigur
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
+    @Autowired
+    ExportService exportService;
+
     @Bean
-
     @StepScope
-    public Tasklet helloWorldTasklet(@Value("#{jobParameters['message']}") String message) {
+    public Tasklet exportEventAuditTasklet(@Value("#{jobParameters['message']}") String message) {
 
-        return (stepContribution, chunkContext) -> { // TODO Auto-generated method
-            LOGGER.debug("value" + message);
+        return (stepContribution, chunkContext) -> {
+            exportService.exportEventAuditTable();
             return RepeatStatus.FINISHED;
         };
     }
 
     @Bean
-    public Step step1() {
+    @StepScope
+    public Tasklet exportKeyValueTasklet(@Value("#{jobParameters['message']}") String message) {
 
-        return stepBuilderFactory.get("step1").tasklet(helloWorldTasklet(null)).build();
+        return (stepContribution, chunkContext) -> {
+            exportService.exportKeyValueTable();
+            return RepeatStatus.FINISHED;
+        };
+    }
+
+    @Bean
+    public Step exportEventAuditStep() {
+
+        return stepBuilderFactory.get("exportEventAuditTasklet").tasklet(exportEventAuditTasklet(null)).build();
+
+    }
+
+    @Bean
+    public Step exportKeyValueStep() {
+
+        return stepBuilderFactory.get("exportKeyValueTasklet").tasklet(exportKeyValueTasklet(null)).build();
 
     }
 
@@ -55,7 +74,7 @@ public class SuretyIvansReportingJobConfiguration extends ReportingBatchConfigur
         JobBuilder jobBuilder = jobBuilderFactory
                 .get("helloworld - test" + String.valueOf(new java.util.Random().nextInt()));
 
-        SimpleJobBuilder sbuilder = jobBuilder.start(step1());
+        SimpleJobBuilder sbuilder = jobBuilder.start(exportEventAuditStep()).next(exportKeyValueStep());
 
         Job job = sbuilder.build();
 

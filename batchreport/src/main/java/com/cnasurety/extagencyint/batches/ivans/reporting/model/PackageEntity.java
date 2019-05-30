@@ -1,4 +1,4 @@
-package com.workflow.report.model;
+package com.cnasurety.extagencyint.batches.ivans.reporting.model;
 
 import java.sql.Date;
 
@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "\"PACKAGE_TBL\"")
-public class Package {
+public class PackageEntity {
 
     @Id
     @Column(name = "\"PACKAGE_KEY\"")
@@ -31,7 +31,7 @@ public class Package {
     String mimeTypeCode;
 
     @Column(name = "\"KEY_VALUE_PAIR_ID\"")
-    String keyValuePairID;
+    String keyValuePairId;
 
     @Column(name = "\"PACKAGE_WORKFLOW_STATUS_TYPE\"")
     String packageWorkflowStatusType;
@@ -90,12 +90,12 @@ public class Package {
         this.mimeTypeCode = mimeTypeCode;
     }
 
-    public String getKeyValuePairID() {
-        return keyValuePairID;
+    public String getKeyValuePairId() {
+        return keyValuePairId;
     }
 
-    public void setKeyValuePairID(String keyValuePairID) {
-        this.keyValuePairID = keyValuePairID;
+    public void setKeyValuePairId(String keyValuePairId) {
+        this.keyValuePairId = keyValuePairId;
     }
 
     public String getPackageWorkflowStatusType() {

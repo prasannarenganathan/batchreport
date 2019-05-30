@@ -1,4 +1,4 @@
-package com.cnasurety.extagencyint.batches.ivans.workflow.repository;
+package com.cnasurety.extagencyint.batches.ivans.reporting.repository;
 
 import java.util.UUID;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.cnasurety.extagencyint.batches.ivans.workflow.domain.PackageEntity;
+import com.cnasurety.extagencyint.batches.ivans.reporting.model.PackageEntity;
 
 @Repository
 public interface PackageRepository extends JpaRepository<PackageEntity, String> {

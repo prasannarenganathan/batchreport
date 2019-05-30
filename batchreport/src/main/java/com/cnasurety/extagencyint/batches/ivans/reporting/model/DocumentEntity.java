@@ -1,4 +1,4 @@
-package com.workflow.report.model;
+package com.cnasurety.extagencyint.batches.ivans.reporting.model;
 
 import java.sql.Date;
 
@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "\"DOCUMENT_TBL\"")
-public class Document {
+public class DocumentEntity {
 
     @Id
     @Column(name = "\"DOCUMENT_KEY\"")

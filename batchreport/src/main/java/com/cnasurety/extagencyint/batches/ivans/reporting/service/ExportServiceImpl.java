@@ -1,4 +1,4 @@
-package com.workflow.report.service;
+package com.cnasurety.extagencyint.batches.ivans.reporting.service;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,15 +11,15 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.cnasurety.extagencyint.batches.ivans.reporting.dto.KeyValueDTO;
+import com.cnasurety.extagencyint.batches.ivans.reporting.model.EventAudit;
+import com.cnasurety.extagencyint.batches.ivans.reporting.model.KeyValue;
+import com.cnasurety.extagencyint.batches.ivans.reporting.repository.DocumentRepository;
+import com.cnasurety.extagencyint.batches.ivans.reporting.repository.EventAuditRepository;
+import com.cnasurety.extagencyint.batches.ivans.reporting.repository.KeyValueRepository;
+import com.cnasurety.extagencyint.batches.ivans.reporting.repository.NotificationRepository;
+import com.cnasurety.extagencyint.batches.ivans.reporting.repository.PackageRepository;
 import com.opencsv.CSVWriter;
-import com.workflow.report.dto.KeyValueDTO;
-import com.workflow.report.model.EventAudit;
-import com.workflow.report.model.KeyValue;
-import com.workflow.report.repository.DocumentRepository;
-import com.workflow.report.repository.EventAuditRepository;
-import com.workflow.report.repository.KeyValueRepository;
-import com.workflow.report.repository.NotificationRepository;
-import com.workflow.report.repository.PackageRepository;
 
 @Component
 public class ExportServiceImpl implements ExportService {
@@ -52,6 +52,7 @@ public class ExportServiceImpl implements ExportService {
 
             List<EventAudit> eventAudits = eventAuditRepository.findAll();
             logger.info("Number of Records Exported: {}", eventAudits.size());
+
             for (EventAudit e : eventAudits) {
                 data.add(new String[] { e.getEventAuditKey(), e.getNotificationEventFromStatus(),
                         e.getNotificationEventToStatus(), e.getPackageEventFromStatus(), e.getPackageEventToStatus(),
@@ -80,21 +81,23 @@ public class ExportServiceImpl implements ExportService {
             List<KeyValue> keyValues = keyValueRepository.findAll();
             logger.info("Number of Records Exported: {}", keyValues.size());
 
-            keyValues.forEach(e -> {
+            keyValues.forEach(keyValue -> {
                 KeyValueDTO keyValueDTO = new KeyValueDTO();
-                BeanUtils.copyProperties(e, keyValueDTO);
-                if (e.getKeyValuePairTypeCode().equals("NOTIFICATION_TBL")) {
+                BeanUtils.copyProperties(keyValue, keyValueDTO);
+                System.out.println(keyValue.getKeyValuePairId().toString());
+                if (keyValue.getKeyValuePairTypeCode().equals("NOTIFICATION_TBL")) {
                     keyValueDTO.setForiegnKeyId(
-                            notificationRepository.findNotificationIdByKeyValuePairId(e.getKeyValuePairId()));
-                } else if (e.getKeyValuePairTypeCode().equals("PACKAGE_TBL")) {
-                    keyValueDTO.setForiegnKeyId(packageRepository.findPackageIdByKeyValuePairId(e.getKeyValuePairId()));
-                } else { // (e.getKeyValuePairTypeCode().equals("DOCUMENT_TBL")) {
-                    keyValueDTO
-                            .setForiegnKeyId(documentRepository.findDocumentIdByKeyValuePairId(e.getKeyValuePairId()));
+                            notificationRepository.findNotificationIdByKeyValuePairId(keyValue.getKeyValuePairId()));
+                } else if (keyValue.getKeyValuePairTypeCode().equals("PACKAGE_TBL")) {
+                    keyValueDTO.setForiegnKeyId(
+                            packageRepository.findPackageIdByKeyValuePairId(keyValue.getKeyValuePairId()));
+                } else { // (keyValue.getKeyValuePairTypeCode().equals("DOCUMENT_TBL")) {
+                    keyValueDTO.setForiegnKeyId(
+                            documentRepository.findDocumentIdByKeyValuePairId(keyValue.getKeyValuePairId()));
                 }
 
                 data.add(new String[] { keyValueDTO.getKeyValueKey(), keyValueDTO.getKey(), keyValueDTO.getValue(),
-                        keyValueDTO.getLastModifiedDate().toString(), keyValueDTO.getKeyValuePairId(),
+                        keyValueDTO.getLastModifiedDate().toString(), keyValueDTO.getKeyValuePairId().toString(),
                         keyValueDTO.getKeyValuePairTypeCode(), keyValueDTO.getForiegnKeyId() });
 
             });

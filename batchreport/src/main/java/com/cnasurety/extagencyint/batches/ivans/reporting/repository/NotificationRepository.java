@@ -1,4 +1,4 @@
-package com.workflow.report.repository;
+package com.cnasurety.extagencyint.batches.ivans.reporting.repository;
 
 import java.util.UUID;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.workflow.report.model.Notification;
+import com.cnasurety.extagencyint.batches.ivans.reporting.model.Notification;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, String> {
