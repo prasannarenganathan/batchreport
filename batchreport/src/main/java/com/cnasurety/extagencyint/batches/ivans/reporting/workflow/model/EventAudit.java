@@ -1,4 +1,4 @@
-package com.cnasurety.extagencyint.batches.ivans.reporting.model;
+package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
 import java.sql.Date;
 

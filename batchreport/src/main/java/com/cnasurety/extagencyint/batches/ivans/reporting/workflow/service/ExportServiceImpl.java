@@ -1,4 +1,4 @@
-package com.cnasurety.extagencyint.batches.ivans.reporting.service;
+package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.service;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,14 +11,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cnasurety.extagencyint.batches.ivans.reporting.dto.KeyValueDTO;
-import com.cnasurety.extagencyint.batches.ivans.reporting.model.EventAudit;
-import com.cnasurety.extagencyint.batches.ivans.reporting.model.KeyValue;
-import com.cnasurety.extagencyint.batches.ivans.reporting.repository.DocumentRepository;
-import com.cnasurety.extagencyint.batches.ivans.reporting.repository.EventAuditRepository;
-import com.cnasurety.extagencyint.batches.ivans.reporting.repository.KeyValueRepository;
-import com.cnasurety.extagencyint.batches.ivans.reporting.repository.NotificationRepository;
-import com.cnasurety.extagencyint.batches.ivans.reporting.repository.PackageRepository;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.dto.KeyValueDTO;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model.EventAudit;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model.KeyValue;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.DocumentRepository;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.EventAuditRepository;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.KeyValueRepository;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.NotificationRepository;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.PackageRepository;
 import com.opencsv.CSVWriter;
 
 @Component

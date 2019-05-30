@@ -1,4 +1,4 @@
-package com.cnasurety.extagencyint.batches.ivans.reporting.service;
+package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.service;
 
 public interface ExportService {
 

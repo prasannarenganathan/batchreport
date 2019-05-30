@@ -1,17 +1,34 @@
-package com.cnasurety.extagencyint.batches.ivans.reporting.dto;
+package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
 import java.sql.Date;
 import java.util.UUID;
 
-public class KeyValueDTO {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "\"KEY_VALUE_TBL\"")
+public class KeyValue {
+    @Id
+    @Column(name = "\"KEY_VALUE_KEY\"")
     private String keyValueKey;
+
+    @Column(name = "\"KEY\"")
     private String key;
+
+    @Column(name = "\"VALUE\"")
     private String value;
+
+    @Column(name = "\"LAST_MODIFIED_DATE\"")
     private Date lastModifiedDate;
+
+    @Column(name = "\"KEY_VALUE_PAIR_ID\"")
     private UUID keyValuePairId;
+
+    @Column(name = "\"KEY_VALUE_PAIR_TYPE_CODE\"")
     private String keyValuePairTypeCode;
-    private String foriegnKeyId;
 
     public String getKeyValueKey() {
         return keyValueKey;
@@ -51,14 +68,6 @@ public class KeyValueDTO {
 
     public void setKeyValuePairId(UUID keyValuePairId) {
         this.keyValuePairId = keyValuePairId;
-    }
-
-    public String getForiegnKeyId() {
-        return foriegnKeyId;
-    }
-
-    public void setForiegnKeyId(String foriegnKeyId) {
-        this.foriegnKeyId = foriegnKeyId;
     }
 
     public String getKeyValuePairTypeCode() {
