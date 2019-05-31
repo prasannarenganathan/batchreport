@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.service.ExportService;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.service.WorkFlowExportService;
 
 @Configuration
 @EnableBatchProcessing
@@ -32,13 +32,14 @@ public class SuretyIvansReportingJobConfiguration {
     private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    ExportService exportService;
+    WorkFlowExportService exportService;
 
     @Bean
     @StepScope
     public Tasklet exportEventAuditTasklet(@Value("#{jobParameters['message']}") String message) {
-
+        LOGGER.info(message);
         return (stepContribution, chunkContext) -> {
+
             exportService.exportEventAuditTable();
             return RepeatStatus.FINISHED;
         };
@@ -47,7 +48,7 @@ public class SuretyIvansReportingJobConfiguration {
     @Bean
     @StepScope
     public Tasklet exportKeyValueTasklet(@Value("#{jobParameters['message']}") String message) {
-
+        LOGGER.info(message);
         return (stepContribution, chunkContext) -> {
             exportService.exportKeyValueTable();
             return RepeatStatus.FINISHED;
@@ -57,27 +58,26 @@ public class SuretyIvansReportingJobConfiguration {
     @Bean
     public Step exportEventAuditStep() {
 
-        return stepBuilderFactory.get("exportEventAuditTasklet").tasklet(exportEventAuditTasklet(null)).build();
+        return stepBuilderFactory.get("exportEventAuditTasklet")
+                .tasklet(exportEventAuditTasklet("Exporting Event Audit Table")).build();
 
     }
 
     @Bean
     public Step exportKeyValueStep() {
 
-        return stepBuilderFactory.get("exportKeyValueTasklet").tasklet(exportKeyValueTasklet(null)).build();
+        return stepBuilderFactory.get("exportKeyValueTasklet")
+                .tasklet(exportKeyValueTasklet("Exporting Key Value Table")).build();
 
     }
 
     @Bean
-    public Job helloWorldJob() {
+    public Job ExportJob() {
 
         JobBuilder jobBuilder = jobBuilderFactory
-                .get("helloworld - test" + String.valueOf(new java.util.Random().nextInt()));
-
+                .get("Export Job: " + String.valueOf(new java.util.Random().nextInt()));
         SimpleJobBuilder sbuilder = jobBuilder.start(exportEventAuditStep()).next(exportKeyValueStep());
-
         Job job = sbuilder.build();
-
         return job;
 
     }

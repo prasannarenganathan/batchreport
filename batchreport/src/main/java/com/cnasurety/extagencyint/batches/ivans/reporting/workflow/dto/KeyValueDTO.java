@@ -1,6 +1,6 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.dto;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 public class KeyValueDTO {
@@ -8,7 +8,7 @@ public class KeyValueDTO {
     private String keyValueKey;
     private String key;
     private String value;
-    private Date lastModifiedDate;
+    private Timestamp lastModifiedDate;
     private UUID keyValuePairId;
     private String keyValuePairTypeCode;
     private String foriegnKeyId;
@@ -37,16 +37,16 @@ public class KeyValueDTO {
         this.value = value;
     }
 
-    public Date getLastModifiedDate() {
+    public UUID getKeyValuePairId() {
+        return keyValuePairId;
+    }
+
+    public Timestamp getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public UUID getKeyValuePairId() {
-        return keyValuePairId;
     }
 
     public void setKeyValuePairId(UUID keyValuePairId) {

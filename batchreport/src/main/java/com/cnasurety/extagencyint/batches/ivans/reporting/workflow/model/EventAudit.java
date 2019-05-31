@@ -1,6 +1,6 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "\"EVENT_AUDIT_TBL\"")
 public class EventAudit {
-    
+
     @Id
     @Column(name = "\"EVENT_AUDIT_KEY\"")
     private String eventAuditKey;
@@ -28,7 +28,7 @@ public class EventAudit {
     private String packageEventToStatus;
 
     @Column(name = "\"LAST_MODIFIED_DATE\"")
-    Date lastModifiedDate;
+    Timestamp lastModifiedDate;
 
     @Column(name = "\"NOTIFICATION_KEY\"")
     private String notificationKey;
@@ -76,11 +76,11 @@ public class EventAudit {
         this.packageEventToStatus = packageEventToStatus;
     }
 
-    public Date getLastModifiedDate() {
+    public Timestamp getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 

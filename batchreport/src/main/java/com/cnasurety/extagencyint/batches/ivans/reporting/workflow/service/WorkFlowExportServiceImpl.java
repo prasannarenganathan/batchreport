@@ -22,7 +22,7 @@ import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.Pa
 import com.opencsv.CSVWriter;
 
 @Component
-public class ExportServiceImpl implements ExportService {
+public class WorkFlowExportServiceImpl implements WorkFlowExportService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     EventAuditRepository eventAuditRepository;

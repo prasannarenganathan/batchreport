@@ -1,6 +1,6 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -22,7 +22,7 @@ public class KeyValue {
     private String value;
 
     @Column(name = "\"LAST_MODIFIED_DATE\"")
-    private Date lastModifiedDate;
+    private Timestamp lastModifiedDate;
 
     @Column(name = "\"KEY_VALUE_PAIR_ID\"")
     private UUID keyValuePairId;
@@ -54,11 +54,11 @@ public class KeyValue {
         this.value = value;
     }
 
-    public Date getLastModifiedDate() {
+    public Timestamp getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 
