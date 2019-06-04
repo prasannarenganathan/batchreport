@@ -138,17 +138,14 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 	@Override
 	public String exportIvansMessageTables(Timestamp lastExecutedTimeStamp) {
 		 try {
-	            logger.info("Exporting Ivans Message Table");
-	            File file = null;
-	            FileWriter outputfile = null;
-	            CSVWriter writer = null;
-	            List<String[]> data = null;
-	            file = new File(applicationConfig.getFilePath()+"IVANS_MESSAGE_TABLE.csv");
-	            outputfile = new FileWriter(file);
+	            logger.info("Exporting Ivans Message and Attachment Table");
+	            
+	            File file = new File(applicationConfig.getFilePath()+"IVANS_MESSAGE_TABLE.csv");
+	            FileWriter outputfile = new FileWriter(file);
 
-	            writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
+	            CSVWriter writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
 	                    CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
-	            data = new ArrayList<String[]>();
+	            List<String[]> data = new ArrayList<String[]>();
 
 	            List<IvansMessage> ivansMessages = null;
 	            if (Objects.isNull(lastExecutedTimeStamp)) {
@@ -157,6 +154,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 	            	ivansMessages = ivansMessageRepository.findAllByTimeStamp(lastExecutedTimeStamp);
 	            }
 	            logger.info("Number of Records Exported: {}", ivansMessages.size());
+	            data.add(new String[] {"IVANS_MESSAGE_TABLE"});
 	            for (IvansMessage ivansMessage : ivansMessages) {
 	                data.add(new String[] {
 	                		ivansMessage.getIvansMessageKey(),ivansMessage.getAgencyStateCode(),ivansMessage.getAgencyCode(),
@@ -168,19 +166,13 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 	                		ivansMessage.getBusinessPurposeTypeCode(),ivansMessage.getRemarkText(),
 	                		ivansMessage.getLastModifiedDate()==null?"":ivansMessage.getLastModifiedDate().toString()});
 	            }
-	            writer.writeAll(data);
-	            writer.close();
-	            
 	            
 	            logger.info("Exporting Ivans Message Attachment Table");
 	            
-	            file = new File(applicationConfig.getFilePath()+"IVANS_MESSAGE_ATTACHMENT_TABLE.csv");
-	            outputfile = new FileWriter(file);
-
-	            writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
-	                    CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
-	            data = new ArrayList<String[]>();
-
+	            
+	            data.add(new String[] {""});
+	            data.add(new String[] {""});
+	            data.add(new String[] {"IVANS_MESSAGE_ATTACHMENT_TABLE"});
 	            List<IvansMessageAttachment> ivansMessageAttachments = null;
 	            if (Objects.isNull(lastExecutedTimeStamp)) {
 	            	ivansMessageAttachments = ivansMessageAttachmentRepository.findAll();
