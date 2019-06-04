@@ -1,8 +1,12 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.service;
 
+import java.sql.Timestamp;
+
 public interface WorkFlowExportService {
 
-    public String exportEventAuditTable();
+    public String exportEventAuditTable(Timestamp lastExecutedTimeStamp);
 
-    public String exportKeyValueTable();
+    public String exportKeyValueTable(Timestamp lastExecutedTimeStamp);
+    
+    public String exportIvansMessageTables(Timestamp lastExecutedTimeStamp);
 }

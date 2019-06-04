@@ -1,5 +1,7 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting;
 
+import java.sql.Timestamp;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -16,11 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.BatchJobExecutionRepository;
 import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.service.WorkFlowExportService;
 
 @Configuration
 @EnableBatchProcessing
+@Component
 public class SuretyIvansReportingJobConfiguration {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -32,15 +37,20 @@ public class SuretyIvansReportingJobConfiguration {
     private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
+    private BatchJobExecutionRepository batchJobExecutionRepository;
+
+    @Autowired
     WorkFlowExportService exportService;
+
+    Timestamp lastExecutedJobTimeStamp;
 
     @Bean
     @StepScope
     public Tasklet exportEventAuditTasklet(@Value("#{jobParameters['message']}") String message) {
         LOGGER.info(message);
         return (stepContribution, chunkContext) -> {
-
-            exportService.exportEventAuditTable();
+            chunkContext.setAttribute("EVENT_AUDIT_TBL", "EVENT_AUDIT_TBL");
+            exportService.exportEventAuditTable(getLastExecutedJobTimeStamp());
             return RepeatStatus.FINISHED;
         };
     }
@@ -49,8 +59,20 @@ public class SuretyIvansReportingJobConfiguration {
     @StepScope
     public Tasklet exportKeyValueTasklet(@Value("#{jobParameters['message']}") String message) {
         LOGGER.info(message);
+
         return (stepContribution, chunkContext) -> {
-            exportService.exportKeyValueTable();
+            exportService.exportKeyValueTable(getLastExecutedJobTimeStamp());
+            return RepeatStatus.FINISHED;
+        };
+    }
+    
+    @Bean
+    @StepScope
+    public Tasklet exportIvansMessageTablesTasklet(@Value("#{jobParameters['message']}") String message) {
+        LOGGER.info(message);
+
+        return (stepContribution, chunkContext) -> {
+            exportService.exportIvansMessageTables(getLastExecutedJobTimeStamp());
             return RepeatStatus.FINISHED;
         };
     }
@@ -70,15 +92,32 @@ public class SuretyIvansReportingJobConfiguration {
                 .tasklet(exportKeyValueTasklet("Exporting Key Value Table")).build();
 
     }
+    
+    @Bean
+    public Step exportIvansMessageStep() {
+
+        return stepBuilderFactory.get("exportIvansMessageTablesTasklet")
+                .tasklet(exportIvansMessageTablesTasklet("Exporting IvansMessage and IvansMessageAttachment Table")).build();
+
+    }
 
     @Bean
     public Job ExportJob() {
-
+    	setLastExecutedJobTimeStamp(batchJobExecutionRepository.findLastExecutedTimeStamp());
         JobBuilder jobBuilder = jobBuilderFactory
                 .get("Export Job: " + String.valueOf(new java.util.Random().nextInt()));
-        SimpleJobBuilder sbuilder = jobBuilder.start(exportEventAuditStep()).next(exportKeyValueStep());
+        SimpleJobBuilder sbuilder = jobBuilder.start(exportEventAuditStep()).next(exportKeyValueStep()).next(exportIvansMessageStep());
         Job job = sbuilder.build();
         return job;
 
     }
+
+    public Timestamp getLastExecutedJobTimeStamp() {
+        return lastExecutedJobTimeStamp;
+    }
+
+    public void setLastExecutedJobTimeStamp(Timestamp lastExecutedJobTimeStamp) {
+        this.lastExecutedJobTimeStamp = lastExecutedJobTimeStamp;
+    }
+
 }
