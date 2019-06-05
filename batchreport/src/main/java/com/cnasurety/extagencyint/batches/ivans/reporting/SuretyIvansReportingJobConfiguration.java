@@ -1,5 +1,6 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting;
 
+import java.io.File;
 import java.sql.Timestamp;
 
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
+import com.cnasurety.extagencyint.batches.ivans.reporting.config.ApplicationConfig;
 import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.BatchJobExecutionRepository;
 import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.service.WorkFlowExportService;
 
@@ -41,6 +43,9 @@ public class SuretyIvansReportingJobConfiguration {
 
     @Autowired
     WorkFlowExportService exportService;
+    
+    @Autowired
+    ApplicationConfig applicationConfig;
 
     Timestamp lastExecutedJobTimeStamp;
 
@@ -103,6 +108,12 @@ public class SuretyIvansReportingJobConfiguration {
 
     @Bean
     public Job ExportJob() {
+    	
+        
+        File directory = new File(applicationConfig.getFilePath());
+        if (! directory.exists()){
+            directory.mkdir();
+        }
     	setLastExecutedJobTimeStamp(batchJobExecutionRepository.findLastExecutedTimeStamp());
         JobBuilder jobBuilder = jobBuilderFactory
                 .get("Export Job: " + String.valueOf(new java.util.Random().nextInt()));

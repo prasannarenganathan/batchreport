@@ -14,5 +14,7 @@ public interface IvansMessageRepository extends JpaRepository<IvansMessage, Stri
 	
 	 @Query("SELECT ima  FROM IvansMessage ima where ima.lastModifiedDate > :lastExecutedDate")
 	    List<IvansMessage> findAllByTimeStamp(@Param("lastExecutedDate") Timestamp lastExecutedDate);
+	 
+	 
 
 }

@@ -37,7 +37,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
     
     @Autowired
     EventAuditRepository eventAuditRepository;
-    public static final String FILE_PATH="C:\\export_data\\";
+    
     @Autowired
     NotificationRepository notificationRepository;
 
@@ -130,7 +130,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
             writer.writeAll(data);
             writer.close();
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("Error: ",e);
         }
         return null;
     }
@@ -148,52 +148,68 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 	            List<String[]> data = new ArrayList<String[]>();
 
 	            List<IvansMessage> ivansMessages = null;
+	            List<IvansMessageAttachment> ivansMessageAttachments = null;
 	            if (Objects.isNull(lastExecutedTimeStamp)) {
 	            	ivansMessages = ivansMessageRepository.findAll();
+	            
 	            } else {
 	            	ivansMessages = ivansMessageRepository.findAllByTimeStamp(lastExecutedTimeStamp);
 	            }
-	            logger.info("Number of Records Exported: {}", ivansMessages.size());
-	            data.add(new String[] {"IVANS_MESSAGE_TABLE"});
+	            
+	            
 	            for (IvansMessage ivansMessage : ivansMessages) {
-	                data.add(new String[] {
-	                		ivansMessage.getIvansMessageKey(),ivansMessage.getAgencyStateCode(),ivansMessage.getAgencyCode(),
-	                		ivansMessage.getNaicsCode(),	ivansMessage.getBondNumber(),ivansMessage.getTermEffectiveDate().toString(),
-	                		ivansMessage.getTermExpiryDate()==null?"":ivansMessage.getTermExpiryDate().toString(),
-	                		ivansMessage.getTransactionDate()==null?"":ivansMessage.getTransactionDate().toString(),ivansMessage.getLineOfBusiness(),
-	                		ivansMessage.getPrincipalName(),
-	                		ivansMessage.getEventDate()==null?"":ivansMessage.getEventDate().toString(),ivansMessage.getActivityNoteTypeCode(),
-	                		ivansMessage.getBusinessPurposeTypeCode(),ivansMessage.getRemarkText(),
-	                		ivansMessage.getLastModifiedDate()==null?"":ivansMessage.getLastModifiedDate().toString()});
+	            	ivansMessageAttachments = ivansMessageAttachmentRepository.findByIvansMessageKey(ivansMessage.getIvansMessageKey());
+	            	if(ivansMessageAttachments.isEmpty()) {
+		            	for(IvansMessageAttachment ivansMessageAttachment:ivansMessageAttachments) {
+		            		data.add(new String[] {
+			                		ivansMessage.getIvansMessageKey().toString(),
+			                		ivansMessage.getAgencyStateCode(),ivansMessage.getAgencyCode(),
+			                		ivansMessage.getNaicsCode(),	
+			                		ivansMessage.getBondNumber(),
+			                		ivansMessage.getTermEffectiveDate().toString(),
+			                		ivansMessage.getTermExpiryDate()==null?"":ivansMessage.getTermExpiryDate().toString(),
+			                		ivansMessage.getTransactionDate()==null?"":ivansMessage.getTransactionDate().toString(),
+			                		ivansMessage.getLineOfBusiness(),
+			                		ivansMessage.getPrincipalName(),
+			                		ivansMessage.getEventDate()==null?"":ivansMessage.getEventDate().toString(),
+			                		ivansMessage.getActivityNoteTypeCode(),
+			                		ivansMessage.getBusinessPurposeTypeCode(),
+			                		ivansMessage.getRemarkText(),
+			                		ivansMessage.getLastModifiedDate()==null?"":ivansMessage.getLastModifiedDate().toString(),
+			                	
+			                		ivansMessageAttachment.getIvansMessgaeAttachmentKey()==null?"":ivansMessageAttachment.getIvansMessgaeAttachmentKey().toString(),
+			                		ivansMessageAttachment.getAttachmentTypeCode(),
+			            	        ivansMessageAttachment.getAttachmentDescription(),
+			            	        ivansMessageAttachment.getAttachmentFileName(),
+			            	        ivansMessageAttachment.getMimeTypeCode(),
+			            	        ivansMessageAttachment.getLastModifiedDate()==null?"":ivansMessageAttachment.getLastModifiedDate().toString(),
+			            	        ivansMessageAttachment.getPackageKey().toString(),
+			            	        ivansMessageAttachment.getIvansMessageKey()==null?"":ivansMessageAttachment.getIvansMessageKey().toString()
+		            		});
+			            }
+	            	}else {
+		            	data.add(new String[] {
+		                		ivansMessage.getIvansMessageKey().toString(),ivansMessage.getAgencyStateCode(),ivansMessage.getAgencyCode(),
+		                		ivansMessage.getNaicsCode(),	ivansMessage.getBondNumber(),ivansMessage.getTermEffectiveDate().toString(),
+		                		ivansMessage.getTermExpiryDate()==null?"":ivansMessage.getTermExpiryDate().toString(),
+		                		ivansMessage.getTransactionDate()==null?"":ivansMessage.getTransactionDate().toString(),ivansMessage.getLineOfBusiness(),
+		                		ivansMessage.getPrincipalName(),
+		                		ivansMessage.getEventDate()==null?"":ivansMessage.getEventDate().toString(),ivansMessage.getActivityNoteTypeCode(),
+		                		ivansMessage.getBusinessPurposeTypeCode(),ivansMessage.getRemarkText(),
+		                		ivansMessage.getLastModifiedDate()==null?"":ivansMessage.getLastModifiedDate().toString(),
+		                				
+		                		"","","","","","","",""});
+		            }
 	            }
+	                
 	            
-	            logger.info("Exporting Ivans Message Attachment Table");
-	            
-	            
-	            data.add(new String[] {""});
-	            data.add(new String[] {""});
-	            data.add(new String[] {"IVANS_MESSAGE_ATTACHMENT_TABLE"});
-	            List<IvansMessageAttachment> ivansMessageAttachments = null;
-	            if (Objects.isNull(lastExecutedTimeStamp)) {
-	            	ivansMessageAttachments = ivansMessageAttachmentRepository.findAll();
-	            } else {
-	            	ivansMessageAttachments = ivansMessageAttachmentRepository.findAllByTimeStamp(lastExecutedTimeStamp);
-	            }
-	            logger.info("Number of Records Exported: {}", ivansMessageAttachments.size());
-	            for (IvansMessageAttachment ivansMessageAttachment : ivansMessageAttachments) {
-	                data.add(new String[] {
-	                		ivansMessageAttachment.getIvansMessgaeAttachmentKey()==null?"":ivansMessageAttachment.getIvansMessgaeAttachmentKey().toString(),ivansMessageAttachment.getAttachmentTypeCode(),
-	                		ivansMessageAttachment.getAttachmentDescription(),ivansMessageAttachment.getAttachmentFileName(),
-	                		ivansMessageAttachment.getMimeTypeCode(),ivansMessageAttachment.getLastModifiedDate()==null?"":ivansMessageAttachment.getLastModifiedDate().toString(),
-	                		ivansMessageAttachment.getPackageKey().toString(),ivansMessageAttachment.getIvansMessageKey()==null?"":ivansMessageAttachment.getIvansMessageKey().toString()});
-	            }
-	           
+	            logger.info("Number of Records Exported: {}", data.size());
 	            writer.writeAll(data);
 	            writer.close();
 
 	            
 	        } catch (Exception e) {
-	            e.printStackTrace();
+	        	logger.error("Error: ",e);
 	        }
 	        return null;
 	}
