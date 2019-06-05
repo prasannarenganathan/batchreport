@@ -1,10 +1,16 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.Date;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -18,7 +24,7 @@ public class IvansMessage implements Serializable {
 
 	@Id
 	@Column(name="\"IVANS_MESSAGE_KEY\"", unique=true, nullable=false)
-	private String ivansMessageKey;
+	private UUID ivansMessageKey;
 
 	@Column(name="\"ACTIVITY_NOTE_TYPE_CODE\"", nullable=false, length=60)
 	private String activityNoteTypeCode;
@@ -71,13 +77,15 @@ public class IvansMessage implements Serializable {
 	public IvansMessage() {
 	}
 
-	public String getIvansMessageKey() {
-		return this.ivansMessageKey;
+	public UUID getIvansMessageKey() {
+		return ivansMessageKey;
 	}
 
-	public void setIvansMessageKey(String ivansMessageKey) {
+	public void setIvansMessageKey(UUID ivansMessageKey) {
 		this.ivansMessageKey = ivansMessageKey;
 	}
+
+
 
 	public String getActivityNoteTypeCode() {
 		return this.activityNoteTypeCode;
