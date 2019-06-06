@@ -1,6 +1,7 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -83,7 +84,7 @@ public class Notification {
     private String notificationWorkflowStatusTypeCode;
 
     @Column(name = "\"LAST_MODIFIED_DATE\"")
-    Date lastModifiedDate;
+    Timestamp lastModifiedDate;
 
 
     @Column(name = "\"IVANS_MESSAGE_KEY\"")
@@ -268,15 +269,15 @@ public class Notification {
         this.notificationWorkflowStatusTypeCode = notificationWorkflowStatusTypeCode;
     }
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+    public Timestamp getLastModifiedDate() {
+		return lastModifiedDate;
+	}
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+	public void setLastModifiedDate(Timestamp lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
 
-    public UUID getNotificationKey() {
+	public UUID getNotificationKey() {
 		return notificationKey;
 	}
 
