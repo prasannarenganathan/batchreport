@@ -1,6 +1,7 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +28,7 @@ public class DocumentEntity {
     @Column(name = "\"LAST_MODIFIED_DATE\"")
     Date lastModifiedDate;
     @Column(name = "\"PACKAGE_KEY\"")
-    String packageKey;
+    UUID packageKey;
 
     public String getDocumentKey() {
         return documentKey;
@@ -85,12 +86,13 @@ public class DocumentEntity {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public String getPackageKey() {
-        return packageKey;
-    }
+	public UUID getPackageKey() {
+		return packageKey;
+	}
 
-    public void setPackageKey(String packageKey) {
-        this.packageKey = packageKey;
-    }
+	public void setPackageKey(UUID packageKey) {
+		this.packageKey = packageKey;
+	}
+
 
 }

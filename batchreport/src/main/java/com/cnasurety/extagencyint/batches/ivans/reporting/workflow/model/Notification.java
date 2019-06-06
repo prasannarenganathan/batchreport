@@ -1,6 +1,7 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,10 @@ import javax.persistence.Table;
 @Table(name = "\"NOTIFICATION_TBL\"")
 public class Notification {
 
+    @Id
+    @Column(name = "\"NOTIFICATION_KEY\"")
+    private UUID notificationKey;
+    
     @Column(name = "\"NOTIFICATION_TYPE_CODE\"")
     private String notificationTypeCode;
 
@@ -80,9 +85,6 @@ public class Notification {
     @Column(name = "\"LAST_MODIFIED_DATE\"")
     Date lastModifiedDate;
 
-    @Id
-    @Column(name = "\"NOTIFICATION_KEY\"")
-    private String notificationKey;
 
     @Column(name = "\"IVANS_MESSAGE_KEY\"")
     private String ivansMessageKey;
@@ -274,15 +276,15 @@ public class Notification {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public String getNotificationKey() {
-        return notificationKey;
-    }
+    public UUID getNotificationKey() {
+		return notificationKey;
+	}
 
-    public void setNotificationKey(String notificationKey) {
-        this.notificationKey = notificationKey;
-    }
+	public void setNotificationKey(UUID notificationKey) {
+		this.notificationKey = notificationKey;
+	}
 
-    public String getIvansMessageKey() {
+	public String getIvansMessageKey() {
         return ivansMessageKey;
     }
 

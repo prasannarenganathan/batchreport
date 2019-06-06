@@ -1,5 +1,6 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,8 @@ import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model.Package
 
 @Repository
 public interface PackageRepository extends JpaRepository<PackageEntity, String> {
-    @Query("SELECT p.packageKey  FROM PackageEntity p where p.keyValuePairId = keyValuePairId")
+    @Query("SELECT p.packageKey  FROM PackageEntity p where p.keyValuePairId = :keyValuePairId")
     String findPackageIdByKeyValuePairId(@Param("keyValuePairId") UUID keyValuePairId);
+    
+    List<PackageEntity> findByNotificationKey(UUID notificationkey);
 }

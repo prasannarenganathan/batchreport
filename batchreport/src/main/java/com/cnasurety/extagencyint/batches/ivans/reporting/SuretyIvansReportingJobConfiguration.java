@@ -82,6 +82,18 @@ public class SuretyIvansReportingJobConfiguration {
         };
     }
 
+    
+    @Bean
+    @StepScope
+    public Tasklet exportNotificationsTablesTasklet(@Value("#{jobParameters['message']}") String message) {
+        LOGGER.info(message);
+
+        return (stepContribution, chunkContext) -> {
+            exportService.exportNotificationTables(getLastExecutedJobTimeStamp());
+            return RepeatStatus.FINISHED;
+        };
+    }
+
     @Bean
     public Step exportEventAuditStep() {
 
@@ -107,6 +119,14 @@ public class SuretyIvansReportingJobConfiguration {
     }
 
     @Bean
+    public Step exportNotificationStep() {
+
+        return stepBuilderFactory.get("exportNotificationsTablesTasklet")
+                .tasklet(exportNotificationsTablesTasklet("Exporting Notification, NOTIFICATION_AGENCY_EXTENSION_TBL,  package and  Document Table")).build();
+
+    }
+    
+    @Bean
     public Job ExportJob() {
     	
         
@@ -117,7 +137,11 @@ public class SuretyIvansReportingJobConfiguration {
     	setLastExecutedJobTimeStamp(batchJobExecutionRepository.findLastExecutedTimeStamp());
         JobBuilder jobBuilder = jobBuilderFactory
                 .get("Export Job: " + String.valueOf(new java.util.Random().nextInt()));
-        SimpleJobBuilder sbuilder = jobBuilder.start(exportEventAuditStep()).next(exportKeyValueStep()).next(exportIvansMessageStep());
+        SimpleJobBuilder sbuilder = jobBuilder.
+        		start(exportEventAuditStep()).
+        		next (exportKeyValueStep()).
+        		next (exportIvansMessageStep()).
+        		next (exportNotificationStep());
         Job job = sbuilder.build();
         return job;
 

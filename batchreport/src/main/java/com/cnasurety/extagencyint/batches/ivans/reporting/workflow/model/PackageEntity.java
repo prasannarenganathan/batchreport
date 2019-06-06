@@ -1,6 +1,7 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ public class PackageEntity {
 
     @Id
     @Column(name = "\"PACKAGE_KEY\"")
-    String packageKey;
+    UUID packageKey;
 
     @Column(name = "\"PACKAGE_TYPE_CODE\"")
     String packageTypeCode;
@@ -40,17 +41,18 @@ public class PackageEntity {
     Date lastModifiedDate;
 
     @Column(name = "\"NOTIFICATION_KEY\"")
-    String notificationKey;
+    UUID notificationKey;
 
-    public String getPackageKey() {
-        return packageKey;
-    }
 
-    public void setPackageKey(String packageKey) {
-        this.packageKey = packageKey;
-    }
+    public UUID getPackageKey() {
+		return packageKey;
+	}
 
-    public String getPackageTypeCode() {
+	public void setPackageKey(UUID packageKey) {
+		this.packageKey = packageKey;
+	}
+
+	public String getPackageTypeCode() {
         return packageTypeCode;
     }
 
@@ -114,12 +116,14 @@ public class PackageEntity {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public String getNotificationKey() {
-        return notificationKey;
-    }
+	public UUID getNotificationKey() {
+		return notificationKey;
+	}
 
-    public void setNotificationKey(String notificationKey) {
-        this.notificationKey = notificationKey;
-    }
+	public void setNotificationKey(UUID notificationKey) {
+		this.notificationKey = notificationKey;
+	}
+
+    
 
 }
