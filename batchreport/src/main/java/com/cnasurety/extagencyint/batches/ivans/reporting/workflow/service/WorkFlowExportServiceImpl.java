@@ -301,6 +301,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 							    		  ReportingUtil.convertToString(packageEntity.getPackageKey()), 	packageEntity.getPackageTypeCode(), 		packageEntity.getPackageId(),
 							    		  packageEntity.getPackageDescription(),							packageEntity.getPackageOutputFileName(),	packageEntity.getMimeTypeCode(),
 							    		  packageEntity.getKeyValuePairId(),								packageEntity.getPackageWorkflowStatusType(),ReportingUtil.convertToString(packageEntity.getLastModifiedDate()),
+							    		  String.valueOf(packageEntity.getPackageFailureCount()),
 							    		  //ReportingUtil.convertToString(packageEntity.getNotificationKey()),
 				
 							    		//DOCUMENT TABLE
@@ -332,6 +333,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 								    		  ReportingUtil.convertToString(packageEntity.getPackageKey()), packageEntity.getPackageTypeCode(), packageEntity.getPackageId(),
 								    		  packageEntity.getPackageDescription(),packageEntity.getPackageOutputFileName(),packageEntity.getMimeTypeCode(),
 								    		  packageEntity.getKeyValuePairId(),packageEntity.getPackageWorkflowStatusType(),ReportingUtil.convertToString(packageEntity.getLastModifiedDate()),ReportingUtil.convertToString(packageEntity.getNotificationKey()),
+								    		  String.valueOf(packageEntity.getPackageFailureCount()),
 								    		  
 								    		  "","","","","","","","" 
 								    		  
