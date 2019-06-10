@@ -92,6 +92,10 @@ public class Notification {
 
     @Column(name = "\"KEY_VALUE_PAIR_ID\"")
     private String keyValuePairId;
+    
+    @Column(name = "\"NOTIFICATION_FAILURE_COUNT\"")
+    private int notificationFailureCount;
+    
 
     public String getNotificationTypeCode() {
         return notificationTypeCode;
@@ -300,5 +304,15 @@ public class Notification {
     public void setKeyValuePairId(String keyValuePairId) {
         this.keyValuePairId = keyValuePairId;
     }
+
+	public int getNotificationFailureCount() {
+		return notificationFailureCount;
+	}
+
+	public void setNotificationFailureCount(int notificationFailureCount) {
+		this.notificationFailureCount = notificationFailureCount;
+	}
+    
+    
 
 }

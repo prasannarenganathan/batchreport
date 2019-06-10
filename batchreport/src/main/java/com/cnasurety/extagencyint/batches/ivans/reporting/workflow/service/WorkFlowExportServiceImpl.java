@@ -190,6 +190,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 			                		ivansMessage.getBusinessPurposeTypeCode(),
 			                		ivansMessage.getRemarkText(),
 			                		ReportingUtil.convertToString(ivansMessage.getLastModifiedDate()),
+			                		String.valueOf(ivansMessage.getDeliveryFailureCount()),
 			                	
 			                		ReportingUtil.convertToString(ivansMessageAttachment.getIvansMessgaeAttachmentKey()),
 			                		ivansMessageAttachment.getAttachmentTypeCode(),
@@ -198,6 +199,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 			            	        ivansMessageAttachment.getMimeTypeCode(),
 			            	        ReportingUtil.convertToString(ivansMessageAttachment.getLastModifiedDate()),
 			            	        ReportingUtil.convertToString(ivansMessageAttachment.getPackageKey())//,
+			            	        
 			            	        //ReportingUtil.convertToString(ivansMessageAttachment.getIvansMessageKey()
 		            		});
 			            }
@@ -211,6 +213,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 		                		ReportingUtil.convertToString(ivansMessage.getEventDate()),
 		                		ivansMessage.getBusinessPurposeTypeCode(),ivansMessage.getRemarkText(),
 		                		ReportingUtil.convertToString(ivansMessage.getLastModifiedDate()),
+		                		String.valueOf(ivansMessage.getDeliveryFailureCount()),
 		                				
 		                		"","","","","","",""});
 		            }
@@ -278,7 +281,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 							    		  notification.getTermNumber(),notification.getTransactionDate(),notification.getLineOfBusiness(),notification.getPrincipalName(),
 							    		  notification.getEventDate().toString(),notification.getEventTypeCode(),notification.getEventSubTypeCode(),notification.getSpecialHandlingIndicator(),
 							    		  notification.getRemarkText(),notification.getNotificationWorkflowStatusTypeCode(),ReportingUtil.convertToString(notification.getLastModifiedDate()),ReportingUtil.convertToString(notification.getNotificationKey()),
-							    		  notification.getIvansMessageKey(),notification.getKeyValuePairId(),
+							    		  notification.getIvansMessageKey(),notification.getKeyValuePairId(),String.valueOf(notification.getNotificationFailureCount()),
 							    		  
 							    		  
 							    		//NOTIFICATION AGENCY EXTENSION TABLE
@@ -320,7 +323,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 								    		  notification.getTermNumber(),notification.getTransactionDate(),notification.getLineOfBusiness(),notification.getPrincipalName(),
 								    		  notification.getEventDate().toString(),notification.getEventTypeCode(),notification.getEventSubTypeCode(),notification.getSpecialHandlingIndicator(),
 								    		  notification.getRemarkText(),notification.getNotificationWorkflowStatusTypeCode(),ReportingUtil.convertToString(notification.getLastModifiedDate()),ReportingUtil.convertToString(notification.getNotificationKey()),
-								    		  notification.getIvansMessageKey(),notification.getKeyValuePairId(),
+								    		  notification.getIvansMessageKey(),notification.getKeyValuePairId(),String.valueOf(notification.getNotificationFailureCount()),
 								    		  
 								    		  notificationAgencyExtension.getNotificationAgencyExtensionKey(),	ReportingUtil.convertToString(notificationAgencyExtension.getIvansEnrollmentInd()),	ReportingUtil.convertToString(notificationAgencyExtension.getIvansPrefDirbilrprts()),
 								    		  ReportingUtil.convertToString(notificationAgencyExtension.getIvansPrefAgcybilstmts()),ReportingUtil.convertToString(notificationAgencyExtension.getIvansPrefIbl()),ReportingUtil.convertToString(notificationAgencyExtension.getIvansPrefSfTx()),
@@ -344,7 +347,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 						    		  notification.getTermNumber(),notification.getTransactionDate(),notification.getLineOfBusiness(),notification.getPrincipalName(),
 						    		  notification.getEventDate().toString(),notification.getEventTypeCode(),notification.getEventSubTypeCode(),notification.getSpecialHandlingIndicator(),
 						    		  notification.getRemarkText(),notification.getNotificationWorkflowStatusTypeCode(),ReportingUtil.convertToString(notification.getLastModifiedDate()),ReportingUtil.convertToString(notification.getNotificationKey()),
-						    		  notification.getIvansMessageKey(),notification.getKeyValuePairId(),
+						    		  notification.getIvansMessageKey(),notification.getKeyValuePairId(),String.valueOf(notification.getNotificationFailureCount()),
 						    		  
 						    		  notificationAgencyExtension.getNotificationAgencyExtensionKey(),ReportingUtil.convertToString(notificationAgencyExtension.getIvansEnrollmentInd()),ReportingUtil.convertToString(notificationAgencyExtension.getIvansPrefDirbilrprts()),
 						    		  ReportingUtil.convertToString(notificationAgencyExtension.getIvansPrefAgcybilstmts()),ReportingUtil.convertToString(notificationAgencyExtension.getIvansPrefIbl()),ReportingUtil.convertToString(notificationAgencyExtension.getIvansPrefSfTx()),
@@ -362,7 +365,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 					    		  notification.getTermNumber(),notification.getTransactionDate(),notification.getLineOfBusiness(),notification.getPrincipalName(),
 					    		  notification.getEventDate().toString(),notification.getEventTypeCode(),notification.getEventSubTypeCode(),notification.getSpecialHandlingIndicator(),
 					    		  notification.getRemarkText(),notification.getNotificationWorkflowStatusTypeCode(),ReportingUtil.convertToString(notification.getLastModifiedDate()),ReportingUtil.convertToString(notification.getNotificationKey()),
-					    		  notification.getIvansMessageKey(),notification.getKeyValuePairId(),
+					    		  notification.getIvansMessageKey(),notification.getKeyValuePairId(),String.valueOf(notification.getNotificationFailureCount()),
 					    		  "","","","","","","","","",
 					    		  "","","","","","","","",
 					    		  "","","","","","","","",""

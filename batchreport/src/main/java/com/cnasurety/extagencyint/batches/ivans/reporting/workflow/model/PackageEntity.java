@@ -43,6 +43,10 @@ public class PackageEntity {
 
     @Column(name = "\"NOTIFICATION_KEY\"")
     UUID notificationKey;
+    
+    @Column(name = "\"PACKAGE_FAILURE_COUNT\"")
+    String packageFailureCount;
+
 
 
     public UUID getPackageKey() {
@@ -125,6 +129,15 @@ public class PackageEntity {
 		this.notificationKey = notificationKey;
 	}
 
+	public String getPackageFailureCount() {
+		return packageFailureCount;
+	}
+
+	public void setPackageFailureCount(String packageFailureCount) {
+		this.packageFailureCount = packageFailureCount;
+	}
+
+	
     
 
 }

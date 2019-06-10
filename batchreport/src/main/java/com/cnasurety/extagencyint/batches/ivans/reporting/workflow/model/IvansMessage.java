@@ -72,7 +72,8 @@ public class IvansMessage implements Serializable {
 	@Column(name="\"TRANSACTION_DATE\"", nullable=false)
 	private Date transactionDate;
 
-	
+	@Column(name="\"DELIVERY_FAILURE_COUNT\"")
+	private int deliveryFailureCount;
 
 	public IvansMessage() {
 	}
@@ -198,5 +199,15 @@ public class IvansMessage implements Serializable {
 	public void setTransactionDate(Date transactionDate) {
 		this.transactionDate = transactionDate;
 	}
+
+	public int getDeliveryFailureCount() {
+		return deliveryFailureCount;
+	}
+
+	public void setDeliveryFailureCount(int deliveryFailureCount) {
+		this.deliveryFailureCount = deliveryFailureCount;
+	}
+	
+	
 
 }
