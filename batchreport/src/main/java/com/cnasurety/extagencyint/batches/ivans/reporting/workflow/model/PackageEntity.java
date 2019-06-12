@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "\"PACKAGE_TBL\"")
+@Table(name = "\"PACKAGE_TBL\"", schema = "workflow")
 public class PackageEntity {
 
     @Id

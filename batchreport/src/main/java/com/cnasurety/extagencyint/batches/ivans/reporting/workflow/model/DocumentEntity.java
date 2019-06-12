@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "\"DOCUMENT_TBL\"")
+@Table(name = "\"DOCUMENT_TBL\"" , schema = "workflow")
 public class DocumentEntity {
 
     @Id

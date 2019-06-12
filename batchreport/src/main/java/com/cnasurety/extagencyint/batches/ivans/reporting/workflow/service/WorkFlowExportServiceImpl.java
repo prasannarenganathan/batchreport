@@ -69,6 +69,8 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
     
     @Autowired
     IvansMessageAttachmentRepository ivansMessageAttachmentRepository;
+    
+    
 
     @Override
     public String exportEventAuditTable(Timestamp lastExecutedTimeStamp) {
@@ -385,5 +387,11 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 	        }
 	        return null;
 	
+	}
+
+	@Override
+	public void purgeTables() {
+		notificationRepository.purgeTransactionTables();
+		
 	}
 }

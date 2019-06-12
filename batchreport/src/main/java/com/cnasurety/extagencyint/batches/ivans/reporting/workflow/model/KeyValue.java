@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "\"KEY_VALUE_TBL\"")
+@Table(name = "\"KEY_VALUE_TBL\"", schema = "workflow")
 public class KeyValue {
     @Id
     @Column(name = "\"KEY_VALUE_KEY\"")

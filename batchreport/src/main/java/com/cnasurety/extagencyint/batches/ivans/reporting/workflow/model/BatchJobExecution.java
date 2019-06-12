@@ -15,7 +15,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "batch_job_execution", schema = "reporting")
+@Table(name = "batch_job_execution")
 public class BatchJobExecution implements Serializable {
     private static final long serialVersionUID = 1L;
 

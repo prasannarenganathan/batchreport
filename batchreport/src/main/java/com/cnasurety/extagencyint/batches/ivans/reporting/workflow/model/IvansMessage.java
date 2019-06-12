@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
  * 
  */
 @Entity
-@Table(name="\"IVANS_MESSAGE_TBL\"")
+@Table(name="\"IVANS_MESSAGE_TBL\"", schema = "workflow")
 public class IvansMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
 

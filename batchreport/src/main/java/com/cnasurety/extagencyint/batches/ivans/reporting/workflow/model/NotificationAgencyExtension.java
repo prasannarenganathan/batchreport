@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
  * 
  */
 @Entity
-@Table(name="\"NOTIFICATION_AGENCY_EXTENSION_TBL\"")
+@Table(name="\"NOTIFICATION_AGENCY_EXTENSION_TBL\"", schema = "workflow")
 public class NotificationAgencyExtension implements Serializable {
 	private static final long serialVersionUID = 1L;
 

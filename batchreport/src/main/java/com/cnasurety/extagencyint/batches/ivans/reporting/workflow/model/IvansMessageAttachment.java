@@ -15,7 +15,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name="\"IVANS_MESSAGE_ATTACHMENT_TBL\"")
+@Table(name="\"IVANS_MESSAGE_ATTACHMENT_TBL\"", schema = "workflow")
 public class IvansMessageAttachment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
