@@ -13,6 +13,6 @@ import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model.KeyValu
 @Repository
 public interface KeyValueRepository extends JpaRepository<KeyValue, String> {
 
-    @Query("SELECT kv  FROM KeyValue kv where kv.lastModifiedDate < :lastExecutedDate")
+    @Query("SELECT kv  FROM KeyValue kv where kv.lastModifiedDate > :lastExecutedDate")
     List<KeyValue> findAllByTimeStamp(@Param("lastExecutedDate") Timestamp lastExecutedDate);
 }
