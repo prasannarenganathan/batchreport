@@ -33,7 +33,7 @@ public class PackageEntity {
     String mimeTypeCode;
 
     @Column(name = "\"KEY_VALUE_PAIR_ID\"")
-    String keyValuePairId;
+    UUID keyValuePairId;
 
     @Column(name = "\"PACKAGE_WORKFLOW_STATUS_TYPE\"")
     String packageWorkflowStatusType;
@@ -97,14 +97,7 @@ public class PackageEntity {
         this.mimeTypeCode = mimeTypeCode;
     }
 
-    public String getKeyValuePairId() {
-        return keyValuePairId;
-    }
-
-    public void setKeyValuePairId(String keyValuePairId) {
-        this.keyValuePairId = keyValuePairId;
-    }
-
+    
     public String getPackageWorkflowStatusType() {
         return packageWorkflowStatusType;
     }
@@ -137,7 +130,16 @@ public class PackageEntity {
 		this.packageFailureCount = packageFailureCount;
 	}
 
+	public UUID getKeyValuePairId() {
+		return keyValuePairId;
+	}
 
+	public void setKeyValuePairId(UUID keyValuePairId) {
+		this.keyValuePairId = keyValuePairId;
+	}
+
+
+	
 
 	
     
