@@ -19,7 +19,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Stri
     @Query("SELECT n.notificationKey  FROM Notification n where n.keyValuePairId = keyValuePairId")
     String findNotificationIdByKeyValuePairId(@Param("keyValuePairId") UUID keyValuePairId);
     
-    @Query("SELECT n  FROM Notification n where n.lastModifiedDate < :lastExecutedDate")
+    @Query("SELECT n  FROM Notification n where n.lastModifiedDate > :lastExecutedDate")
     List<Notification> findAllByTimeStamp(@Param("lastExecutedDate") Timestamp lastExecutedDate);
     
     @Procedure( name = "deleteTransactionTables")
