@@ -13,10 +13,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "\"NOTIFICATION_TBL\"", schema = "workflow")
-@NamedStoredProcedureQueries({
-	   @NamedStoredProcedureQuery(name = "deleteTransactionTables", 
-	                              procedureName = "workflow.purgeTransactionTables")
-	})
 public class Notification {
 
     @Id

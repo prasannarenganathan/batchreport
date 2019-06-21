@@ -11,6 +11,5 @@ public interface WorkFlowExportService {
     public String exportIvansMessageTables(Timestamp lastExecutedTimeStamp);
     
     public String exportNotificationTables(Timestamp lastExecutedTimeStamp);
-    
-    public void purgeTables();
+
 }

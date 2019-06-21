@@ -93,17 +93,6 @@ public class SuretyIvansReportingJobConfiguration {
             return RepeatStatus.FINISHED;
         };
     }
-    
-    @Bean
-    @StepScope
-    public Tasklet purgeTransactionsTablesTasklet(@Value("#{jobParameters['message']}") String message) {
-        LOGGER.info(message);
-
-        return (stepContribution, chunkContext) -> {
-            exportService.purgeTables();
-            return RepeatStatus.FINISHED;
-        };
-    }
 
     @Bean
     public Step exportEventAuditStep() {
@@ -137,13 +126,6 @@ public class SuretyIvansReportingJobConfiguration {
 
     }
     
-    @Bean
-    public Step purgeTransactiosStep() {
-
-        return stepBuilderFactory.get("purgeTransactionsTablesTasklet")
-                .tasklet(purgeTransactionsTablesTasklet("deleting Transaction tables records which are less than 90 days")).build();
-
-    }
     
     @Bean
     public Job ExportJob() {
@@ -166,19 +148,6 @@ public class SuretyIvansReportingJobConfiguration {
 
     }
     
-    @Bean
-    public Job PurgeJob() {
-    	
-        
-        JobBuilder jobBuilder = jobBuilderFactory
-                .get("Export Job: " + String.valueOf(new java.util.Random().nextInt()));
-        SimpleJobBuilder sbuilder = jobBuilder.
-        		start(purgeTransactiosStep());
-        Job job = sbuilder.build();
-        return job;
-
-    }
-
     public Timestamp getLastExecutedJobTimeStamp() {
         return lastExecutedJobTimeStamp;
     }

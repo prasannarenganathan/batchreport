@@ -21,8 +21,5 @@ public interface NotificationRepository extends JpaRepository<Notification, Stri
     
     @Query("SELECT n  FROM Notification n where n.lastModifiedDate > :lastExecutedDate")
     List<Notification> findAllByTimeStamp(@Param("lastExecutedDate") Timestamp lastExecutedDate);
-    
-    @Procedure( name = "deleteTransactionTables")
-    void purgeTransactionTables();
    
 }

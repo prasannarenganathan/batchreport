@@ -76,7 +76,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
     public String exportEventAuditTable(Timestamp lastExecutedTimeStamp) {
         try {
             logger.info("Exporting Event Auit Table");
-            File file = new File(applicationConfig.getFilePath()+"EVENT_AUDIT_TABLE.csv");
+            File file = new File(applicationConfig.getFilePath()+"EVENT_AUDIT_TABLE_"+ReportingUtil.getCurrentDate()+".csv");
             FileWriter outputfile = new FileWriter(file);
             List<EventAudit> eventAudits = null;
             CSVWriter writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
@@ -108,7 +108,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
         try {
             logger.info("Exporting Key Value Table");
 
-            File file = new File(applicationConfig.getFilePath()+"KEY_VALUE_TABLE.csv");
+            File file = new File(applicationConfig.getFilePath()+"KEY_VALUE_TABLE_"+ReportingUtil.getCurrentDate()+".csv");
             FileWriter outputfile = new FileWriter(file);
 
             CSVWriter writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
@@ -156,7 +156,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 		 try {
 	            logger.info("Exporting Ivans Message and Attachment Table");
 	            
-	            File file = new File(applicationConfig.getFilePath()+"IVANS_MESSAGE_TABLE.csv");
+	            File file = new File(applicationConfig.getFilePath()+"IVANS_MESSAGE_TABLE_"+ReportingUtil.getCurrentDate()+".csv");
 	            FileWriter outputfile = new FileWriter(file);
 
 	            CSVWriter writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
@@ -239,7 +239,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 		 try {
 	            logger.info("Exporting Notification, Notification Agency Extension, Package and Document Table");
 	            
-	            File file = new File(applicationConfig.getFilePath()+"NOTIFICATION_TABLE.csv");
+	            File file = new File(applicationConfig.getFilePath()+"NOTIFICATION_TABLE_"+ReportingUtil.getCurrentDate()+".csv");
 	            FileWriter outputfile = new FileWriter(file);
 
 	            CSVWriter writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
@@ -388,10 +388,5 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 	        return null;
 	
 	}
-
-	@Override
-	public void purgeTables() {
-		notificationRepository.purgeTransactionTables();
-		
-	}
+	
 }
