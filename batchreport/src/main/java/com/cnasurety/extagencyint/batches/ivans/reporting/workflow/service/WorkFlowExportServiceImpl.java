@@ -1,24 +1,25 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.service;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.sql.Date;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import com.cnasurety.extagencyint.batches.ivans.reporting.cloud.storeage.CloudStorageHelper;
 import com.cnasurety.extagencyint.batches.ivans.reporting.config.ApplicationConfig;
+import com.cnasurety.extagencyint.batches.ivans.reporting.util.CSVWriter;
 import com.cnasurety.extagencyint.batches.ivans.reporting.util.ReportingUtil;
 import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.dto.KeyValueDTO;
 import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model.DocumentEntity;
@@ -37,7 +38,6 @@ import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.Ke
 import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.NotificationAgencyExtensionRepository;
 import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.NotificationRepository;
 import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.PackageRepository;
-import com.opencsv.CSVWriter;
 
 @Component
 public class WorkFlowExportServiceImpl implements WorkFlowExportService {
@@ -70,16 +70,24 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
     @Autowired
     IvansMessageAttachmentRepository ivansMessageAttachmentRepository;
     
+    @Autowired
+    CloudStorageHelper gcloudStorage;
     
+    private static final String FILE_TYPE = ".csv";
+    
+    private static final String EVENT_AUDIT_TABLE = "EVENTAUDITTABLE_";
+    private static final String KEY_VALUE_TABLE = "KEYVALUETABLE_";
+    private static final String IVANS_MESSAGE_TABLE = "IVANSMESSAGETABLE_";
+    private static final String NOTIFICATION_TABLE = "NOTIFICATIONTABLE_";
 
     @Override
     public String exportEventAuditTable(Timestamp lastExecutedTimeStamp) {
         try {
             logger.info("Exporting Event Auit Table");
-            File file = new File(applicationConfig.getFilePath()+"EVENT_AUDIT_TABLE_"+ReportingUtil.getCurrentDate()+".csv");
+            File file = new File(applicationConfig.getFilePath()+EVENT_AUDIT_TABLE+ReportingUtil.getCurrentDate()+FILE_TYPE);
             FileWriter outputfile = new FileWriter(file);
             List<EventAudit> eventAudits = null;
-            CSVWriter writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
+            CSVWriter writer = new CSVWriter(outputfile, '|',
                     CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
             List<String[]> data = new ArrayList<String[]>();
 
@@ -97,21 +105,27 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
             }
             writer.writeAll(data);
             writer.close();
+            storeFileToBucket(EVENT_AUDIT_TABLE, file);
+           
+            
+            
         } catch (Exception e) {
+        	e.printStackTrace();
             logger.error("Error while exporting EVENT_AUDIT_TBL {}", e);
         }
         return null;
     }
 
+    
     @Override
     public String exportKeyValueTable(Timestamp lastExecutedTimeStamp) {
         try {
             logger.info("Exporting Key Value Table");
 
-            File file = new File(applicationConfig.getFilePath()+"KEY_VALUE_TABLE_"+ReportingUtil.getCurrentDate()+".csv");
+            File file = new File(applicationConfig.getFilePath()+KEY_VALUE_TABLE+ReportingUtil.getCurrentDate()+FILE_TYPE);
             FileWriter outputfile = new FileWriter(file);
 
-            CSVWriter writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
+            CSVWriter writer = new CSVWriter(outputfile, '|',
                     CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
             List<String[]> data = new ArrayList<String[]>();
 
@@ -145,6 +159,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
             });
             writer.writeAll(data);
             writer.close();
+            storeFileToBucket(KEY_VALUE_TABLE, file );
         } catch (Exception e) {
         	logger.error("Error: ",e);
         }
@@ -156,10 +171,10 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 		 try {
 	            logger.info("Exporting Ivans Message and Attachment Table");
 	            
-	            File file = new File(applicationConfig.getFilePath()+"IVANS_MESSAGE_TABLE_"+ReportingUtil.getCurrentDate()+".csv");
+	            File file = new File(applicationConfig.getFilePath()+IVANS_MESSAGE_TABLE+ReportingUtil.getCurrentDate()+FILE_TYPE);
 	            FileWriter outputfile = new FileWriter(file);
 
-	            CSVWriter writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
+	            CSVWriter writer = new CSVWriter(outputfile, '|',
 	                    CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
 	            List<String[]> data = new ArrayList<String[]>();
 
@@ -225,7 +240,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 	            logger.info("Number of Records Exported: {}", data.size());
 	            writer.writeAll(data);
 	            writer.close();
-
+	            storeFileToBucket(IVANS_MESSAGE_TABLE, file );
 	            
 	        } catch (Exception e) {
 	        	logger.error("Error: ",e);
@@ -239,10 +254,10 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 		 try {
 	            logger.info("Exporting Notification, Notification Agency Extension, Package and Document Table");
 	            
-	            File file = new File(applicationConfig.getFilePath()+"NOTIFICATION_TABLE_"+ReportingUtil.getCurrentDate()+".csv");
+	            File file = new File(applicationConfig.getFilePath()+NOTIFICATION_TABLE+ReportingUtil.getCurrentDate()+FILE_TYPE);
 	            FileWriter outputfile = new FileWriter(file);
 
-	            CSVWriter writer = new CSVWriter(outputfile, '|', CSVWriter.NO_QUOTE_CHARACTER,
+	            CSVWriter writer = new CSVWriter(outputfile, '|',
 	                    CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
 	            List<String[]> data = new ArrayList<String[]>();
 
@@ -380,7 +395,7 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 	            logger.info("Number of Records Exported: {}", data.size());
 	            writer.writeAll(data);
 	            writer.close();
-
+	            storeFileToBucket(NOTIFICATION_TABLE, file );
 	            
 	        } catch (Exception e) {
 	        	logger.error("Error: ",e);
@@ -388,5 +403,15 @@ public class WorkFlowExportServiceImpl implements WorkFlowExportService {
 	        return null;
 	
 	}
-	
+	private void storeFileToBucket(String fileName,File file ) {
+    	try {
+    	 final InputStream targetStream = new DataInputStream(new FileInputStream(file));
+         String storageSuccesslink = gcloudStorage.uploadFile(fileName,FILE_TYPE,targetStream, "ivans_bucket");
+         if(!StringUtils.isEmpty(storageSuccesslink)) {
+         	file.delete();
+         }
+    	}catch(Exception e) {
+    		logger.error("Error while storing file in bucket for {} {}",fileName, e);
+    	}
+    }	
 }

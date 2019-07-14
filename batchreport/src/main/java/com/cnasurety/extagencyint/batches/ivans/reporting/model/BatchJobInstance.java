@@ -1,4 +1,4 @@
-package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
+package com.cnasurety.extagencyint.batches.ivans.reporting.model;
 
 import java.io.Serializable;
 import java.util.List;
