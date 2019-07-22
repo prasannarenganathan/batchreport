@@ -1,7 +1,13 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.util;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.Flushable;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 
 public class CSVWriter implements Closeable, Flushable {
@@ -11,16 +17,15 @@ public class CSVWriter implements Closeable, Flushable {
    public static final String DEFAULT_LINE_END = "\n";
    public static final String RFC4180_LINE_END = "\r\n";
 
+   
    protected final Writer writer;
    protected final char separator;
    protected final char escapechar;
    protected String lineEnd;
    protected volatile IOException exception;
 
-   
 
-  
-   public CSVWriter(Writer writer, char separator, char escapechar, String lineEnd) {
+public CSVWriter(Writer writer, char separator, char escapechar, String lineEnd) {
       this.writer = writer;
       this.separator = separator;
       this.escapechar = escapechar;

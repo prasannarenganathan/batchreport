@@ -1,6 +1,5 @@
 package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 
