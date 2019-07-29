@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "\"EVENT_AUDIT_TBL\"", schema = "workflow")
-public class EventAudit {
+public class EventAudit extends EntityDataReader{
 
     @Id
     @Column(name = "\"EVENT_AUDIT_KEY\"")

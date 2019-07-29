@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "\"KEY_VALUE_TBL\"", schema = "workflow")
-public class KeyValue {
+public class KeyValue extends EntityDataReader{
     @Id
     @Column(name = "\"KEY_VALUE_KEY\"")
     private String keyValueKey;
@@ -30,6 +30,8 @@ public class KeyValue {
     @Column(name = "\"KEY_VALUE_PAIR_TYPE_CODE\"")
     private String keyValuePairTypeCode;
 
+    private String foriegnKeyId;
+    
     public String getKeyValueKey() {
         return keyValueKey;
     }
@@ -77,5 +79,16 @@ public class KeyValue {
     public void setKeyValuePairTypeCode(String keyValuePairTypeCode) {
         this.keyValuePairTypeCode = keyValuePairTypeCode;
     }
+
+	public String getForiegnKeyId() {
+		return foriegnKeyId;
+	}
+
+	public void setForiegnKeyId(String foriegnKeyId) {
+		this.foriegnKeyId = foriegnKeyId;
+	}
+
+    
+    
 
 }

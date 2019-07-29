@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "\"NOTIFICATION_TBL\"", schema = "workflow")
-public class Notification {
+public class Notification extends EntityDataReader{
 
     @Id
     @Column(name = "\"NOTIFICATION_KEY\"")

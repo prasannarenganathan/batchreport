@@ -10,143 +10,73 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.job.builder.SimpleJobBuilder;
-import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import com.cnasurety.extagencyint.batches.ivans.reporting.config.ApplicationConfig;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model.EventAudit;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model.IvansMessage;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model.KeyValue;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model.Notification;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.processor.EventAuditItemProcessor;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.processor.IvansMessageItemProcessor;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.processor.KeyValueItemProcessor;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.processor.NotificationItemProcessor;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.reader.EventAuditItemReader;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.reader.IvansMessageItemReader;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.reader.KeyValueItemReader;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.reader.NotificationItemReader;
 import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.repository.BatchJobExecutionRepository;
-import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.service.WorkFlowExportService;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.writer.EventAuditItemWriter;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.writer.IvansMessageItemWriter;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.writer.KeyValueItemWriter;
+import com.cnasurety.extagencyint.batches.ivans.reporting.workflow.writer.NotificationItemWriter;
 
 @Configuration
 @EnableBatchProcessing
-@Component
 public class SuretyIvansReportingJobConfiguration {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private JobBuilderFactory jobBuilderFactory;
+    public JobBuilderFactory jobBuilderFactory;
 
     @Autowired
-    private StepBuilderFactory stepBuilderFactory;
+    public StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    private BatchJobExecutionRepository batchJobExecutionRepository;
-
+    EventAuditItemProcessor eventAuditItemProcessor;
+    
     @Autowired
-    WorkFlowExportService exportService;
+    EventAuditItemWriter eventAuditItemWriter;
+    
+    @Autowired
+    KeyValueItemProcessor keyValueItemProcessor;
+    
+    @Autowired
+    KeyValueItemWriter keyValueItemWriter;
+    
+    @Autowired
+    IvansMessageItemProcessor ivansMessageItemProcessor;
+    
+    @Autowired
+    IvansMessageItemWriter ivansMessageItemWriter;
+    
+    @Autowired
+    NotificationItemProcessor notificationItemProcessor;
+    
+    @Autowired
+    NotificationItemWriter notificationItemWriter;
     
     @Autowired
     ApplicationConfig applicationConfig;
-
+    
+    @Autowired
+    private BatchJobExecutionRepository batchJobExecutionRepository;
+    
     Timestamp lastExecutedJobTimeStamp;
-
-    @Bean
-    @StepScope
-    public Tasklet exportEventAuditTasklet(@Value("#{jobParameters['message']}") String message) {
-        LOGGER.info(message);
-        return (stepContribution, chunkContext) -> {
-            chunkContext.setAttribute("EVENT_AUDIT_TBL", "EVENT_AUDIT_TBL");
-            exportService.exportEventAuditTable(getLastExecutedJobTimeStamp());
-            return RepeatStatus.FINISHED;
-        };
-    }
-
-    @Bean
-    @StepScope
-    public Tasklet exportKeyValueTasklet(@Value("#{jobParameters['message']}") String message) {
-        LOGGER.info(message);
-
-        return (stepContribution, chunkContext) -> {
-            exportService.exportKeyValueTable(getLastExecutedJobTimeStamp());
-            return RepeatStatus.FINISHED;
-        };
-    }
-    
-    @Bean
-    @StepScope
-    public Tasklet exportIvansMessageTablesTasklet(@Value("#{jobParameters['message']}") String message) {
-        LOGGER.info(message);
-
-        return (stepContribution, chunkContext) -> {
-            exportService.exportIvansMessageTables(getLastExecutedJobTimeStamp());
-            return RepeatStatus.FINISHED;
-        };
-    }
-
-    
-    @Bean
-    @StepScope
-    public Tasklet exportNotificationsTablesTasklet(@Value("#{jobParameters['message']}") String message) {
-        LOGGER.info(message);
-
-        return (stepContribution, chunkContext) -> {
-            exportService.exportNotificationTables(getLastExecutedJobTimeStamp());
-            return RepeatStatus.FINISHED;
-        };
-    }
-
-    @Bean
-    public Step exportEventAuditStep() {
-
-        return stepBuilderFactory.get("exportEventAuditTasklet")
-                .tasklet(exportEventAuditTasklet("Exporting Event Audit Table")).build();
-
-    }
-
-    @Bean
-    public Step exportKeyValueStep() {
-
-        return stepBuilderFactory.get("exportKeyValueTasklet")
-                .tasklet(exportKeyValueTasklet("Exporting Key Value Table")).build();
-
-    }
-    
-    @Bean
-    public Step exportIvansMessageStep() {
-
-        return stepBuilderFactory.get("exportIvansMessageTablesTasklet")
-                .tasklet(exportIvansMessageTablesTasklet("Exporting IvansMessage and IvansMessageAttachment Table")).build();
-
-    }
-
-    @Bean
-    public Step exportNotificationStep() {
-
-        return stepBuilderFactory.get("exportNotificationsTablesTasklet")
-                .tasklet(exportNotificationsTablesTasklet("Exporting Notification, NOTIFICATION_AGENCY_EXTENSION_TBL,  package and  Document Table")).build();
-
-    }
-    
-    
-    @Bean
-    public Job ExportJob() {
-    	
-        
-        File directory = new File(applicationConfig.getFilePath());
-        if (! directory.exists()){
-            directory.mkdir();
-        }
-    	setLastExecutedJobTimeStamp(batchJobExecutionRepository.findLastExecutedTimeStamp());
-        JobBuilder jobBuilder = jobBuilderFactory
-                .get("Export Job: " + String.valueOf(new java.util.Random().nextInt()));
-        SimpleJobBuilder sbuilder = jobBuilder.
-        		start(exportEventAuditStep()).
-        		next (exportKeyValueStep()).
-        		next (exportIvansMessageStep()).
-        		next (exportNotificationStep());
-        Job job = sbuilder.build();
-        return job;
-
-    }
     
     public Timestamp getLastExecutedJobTimeStamp() {
         return lastExecutedJobTimeStamp;
@@ -155,5 +85,161 @@ public class SuretyIvansReportingJobConfiguration {
     public void setLastExecutedJobTimeStamp(Timestamp lastExecutedJobTimeStamp) {
         this.lastExecutedJobTimeStamp = lastExecutedJobTimeStamp;
     }
+    
+    @Bean
+    public Job exportEventAuditJob(JobCompletionNotificationListener listener, Step eventAuditStep) {
+    	
+    	 File directory = new File(applicationConfig.getFilePath());
+         if (! directory.exists()){
+             directory.mkdir();
+         }
+         
+      	setLastExecutedJobTimeStamp(batchJobExecutionRepository.findLastExecutedTimeStamp());
+         
+        return jobBuilderFactory.get("exportEventAuditJob")
+            .incrementer(new RunIdIncrementer())
+            .listener(listener)
+            .flow(eventAuditStep)
+            .end()
+            .build();
+    }
 
+    @Bean
+    public Step eventAuditStep() {
+        return stepBuilderFactory.get("eventAuditStep")
+        		 .<EventAudit, EventAudit> chunk(10)
+                 .reader(eventAuditItemReader())
+                 .processor(eventAuditItemProcessor)
+                 .writer(eventAuditItemWriter)
+                 .build();
+    }
+    
+    @Bean
+   	public EventAuditItemReader eventAuditItemReader(){
+       	EventAuditItemReader itemReader = new EventAuditItemReader();
+       	itemReader.setLastExecutedJobTimeStamp(getLastExecutedJobTimeStamp());
+   		
+   		return itemReader;
+   	}
+    
+  
+    
+    @Bean
+    public Job exportKeyValueJob(JobCompletionNotificationListener listener, Step keyValueStep) {
+    	
+    	 File directory = new File(applicationConfig.getFilePath());
+         if (! directory.exists()){
+             directory.mkdir();
+         }
+         
+      	setLastExecutedJobTimeStamp(batchJobExecutionRepository.findLastExecutedTimeStamp());
+         
+        return jobBuilderFactory.get("exportKeyValueJob")
+            .incrementer(new RunIdIncrementer())
+            .listener(listener)
+            .flow(keyValueStep)
+            .end()
+            .build();
+    }
+
+    @Bean
+    public Step keyValueStep() {
+        return stepBuilderFactory.get("keyValueStep")
+        		 .<KeyValue, KeyValue> chunk(10)
+                 .reader(keyValueItemReader())
+                 .processor(keyValueItemProcessor)
+                 .writer(keyValueItemWriter)
+                 .build();
+    }
+ 
+ 
+    
+    @Bean
+   	public KeyValueItemReader keyValueItemReader(){
+    	KeyValueItemReader itemReader = new KeyValueItemReader();
+       	itemReader.setLastExecutedJobTimeStamp(getLastExecutedJobTimeStamp());
+   		
+   		return itemReader;
+   	}
+    
+    @Bean
+    public Job exportIvansMessageJob(JobCompletionNotificationListener listener, Step ivansMessageStep) {
+    	
+    	 File directory = new File(applicationConfig.getFilePath());
+         if (! directory.exists()){
+             directory.mkdir();
+         }
+         
+      	setLastExecutedJobTimeStamp(batchJobExecutionRepository.findLastExecutedTimeStamp());
+         
+        return jobBuilderFactory.get("exportIvansMessageJob")
+            .incrementer(new RunIdIncrementer())
+            .listener(listener)
+            .flow(ivansMessageStep)
+            .end()
+            .build();
+    }
+
+    @Bean
+    public Step ivansMessageStep() {
+        return stepBuilderFactory.get("ivansMessageStep")
+        		 .<IvansMessage, IvansMessage> chunk(10)
+                 .reader(ivansMessageItemReader())
+                 .processor(ivansMessageItemProcessor)
+                 .writer(ivansMessageItemWriter)
+                 .build();
+    }
+ 
+ 
+    
+    @Bean
+   	public IvansMessageItemReader ivansMessageItemReader(){
+    	IvansMessageItemReader itemReader = new IvansMessageItemReader();
+       	itemReader.setLastExecutedJobTimeStamp(getLastExecutedJobTimeStamp());
+   		
+   		return itemReader;
+   	}
+    
+    
+    @Bean
+    public Job exportNotificationJob(JobCompletionNotificationListener listener, Step notificationStep) {
+    	
+    	 File directory = new File(applicationConfig.getFilePath());
+         if (! directory.exists()){
+             directory.mkdir();
+         }
+         
+      	setLastExecutedJobTimeStamp(batchJobExecutionRepository.findLastExecutedTimeStamp());
+         
+        return jobBuilderFactory.get("exportIvansMessageJob")
+            .incrementer(new RunIdIncrementer())
+            .listener(listener)
+            .flow(notificationStep)
+            .end()
+            .build();
+    }
+
+    @Bean
+    public Step notificationStep() {
+        return stepBuilderFactory.get("notificationStep")
+        		 .<Notification, Notification> chunk(10)
+                 .reader(notificationItemReader())
+                 .processor(notificationItemProcessor)
+                 .writer(notificationItemWriter)
+                 .build();
+    }
+ 
+ 
+    
+    @Bean
+   	public NotificationItemReader notificationItemReader(){
+    	NotificationItemReader itemReader = new NotificationItemReader();
+       	itemReader.setLastExecutedJobTimeStamp(getLastExecutedJobTimeStamp());
+   		
+   		return itemReader;
+   	}
+    
+    
+   
+       
 }

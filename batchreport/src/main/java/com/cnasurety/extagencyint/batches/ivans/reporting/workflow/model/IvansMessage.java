@@ -3,6 +3,7 @@ package com.cnasurety.extagencyint.batches.ivans.reporting.workflow.model;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -19,8 +20,8 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="\"IVANS_MESSAGE_TBL\"", schema = "workflow")
-public class IvansMessage implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class IvansMessage   extends EntityDataReader  {
+
 
 	@Id
 	@Column(name="\"IVANS_MESSAGE_KEY\"", unique=true, nullable=false)
@@ -74,6 +75,9 @@ public class IvansMessage implements Serializable {
 
 	@Column(name="\"DELIVERY_FAILURE_COUNT\"")
 	private int deliveryFailureCount;
+	
+	
+	
 
 	public IvansMessage() {
 	}
@@ -207,6 +211,10 @@ public class IvansMessage implements Serializable {
 	public void setDeliveryFailureCount(int deliveryFailureCount) {
 		this.deliveryFailureCount = deliveryFailureCount;
 	}
+
+	
+
+	
 	
 	
 
